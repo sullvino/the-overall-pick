@@ -35,19 +35,25 @@ outcome tracking is planned but not built yet.*
 
 Players haven't necessarily had time to reach Full-Time NHLer or Star
 yet, regardless of talent. We flag them as **Still Developing** rather
-than counting them as a miss — the 5-year clock starts at a player's
-first NHL game, not their draft day, since some prospects (especially
-defensemen, and those developing overseas) don't reach the NHL for
-several years after being drafted. A player who hasn't debuted at all
-yet is judged from their draft year instead, since there's no debut to
-count from.
+than counting them as a miss:
+
+- If a player has debuted, the clock is **4 years from their first NHL
+  game**, not their draft day — some prospects (especially defensemen,
+  and those developing overseas) don't reach the NHL for several years
+  after being drafted, and shouldn't be penalized for years spent before
+  they ever got a look. Four years of real NHL opportunity is enough
+  time to see whether someone becomes a regular — a full-time role for
+  that long is 300+ games, well past the 200-game bar.
+- If a player hasn't debuted at all, the clock is **5 years from their
+  draft year** instead, since there's no debut to count from yet and a
+  longer runway is fair before their first NHL look even happens.
 
 ## 1st Round Bust
 
 A first-round pick who never became a Full-Time NHLer or better (Star and
 Elite both count, even if they haven't hit the raw games total yet — see
-below), once 5 years have passed since their NHL debut (or since being
-drafted, if they never debuted) for that to be a conclusive outcome
+below), once enough time has passed (see Still Developing above) for
+that to be a conclusive outcome
 rather than a still-developing one. A first-rounder who's stuck around as
 a depth/role player but never became a true regular is still a bust —
 merely reaching the NHL, or even sticking as a "meaningful" 100-game

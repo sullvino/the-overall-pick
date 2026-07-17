@@ -284,6 +284,52 @@ forwards who debuted late and are only now approaching their own
 the user since it's a materially different number than what had already
 gone into content the same afternoon.
 
+## Debut-based clock shortened from 5 years to 4 -- but only for players who've actually debuted (2026-07-17, same afternoon)
+
+User's own read on the 5-year debut-based window: still a year or two too
+long. Concrete example: Alexander Alexeyev (2018, D, debut 2021, 80 GP
+across 4 partial seasons) — 4 real NHL seasons without cracking a
+regular role, still reading as Still Developing. User's math: a genuine
+full-time role sustained for 4 seasons is ~300+ games, well clear of the
+200-game Full-Time floor, so 4 years of *actual NHL opportunity* should
+be enough runway to judge.
+
+**Checked before applying uniformly, because the reasoning has a hole:**
+shortening the window to 4 years everywhere would also apply to players
+who haven't debuted *at all* yet — e.g. Chase Stillman, Chaz Lucius,
+Corson Ceulemans (all round-1 2021, zero career games). That's exactly
+the case the previous fix (draft year -> debut year) was built to
+protect: we already established that 3-5 year draft-to-debut gaps are
+common and legitimate. A player with literally zero NHL games isn't in
+the same situation as Alexeyev, who's actually been given four real
+seasons of ice time.
+
+**Fix: split the clock by whether the player has debuted.**
+- Debuted: 4 years from first NHL game (the tightened bar, matches the
+  user's reasoning exactly).
+- Never debuted: unchanged, 5 years from draft year (the fallback case,
+  measuring a different thing — time-to-first-look, not
+  time-to-prove-yourself-once-there).
+
+Verified against every case discussed today: Alexeyev flips to bust as
+intended; Mukhamadullin (debut 2023, still climbing) stays protected;
+Ty Smith and Julien Gauthier (both debuted early) stay busts; Chase
+Stillman/Chaz Lucius/Corson Ceulemans (never debuted, drafted 2021,
+5 years exactly) correctly stay Still Developing rather than getting
+prematurely busted. One further side effect: Lukas Reichel (debut 2021,
+198 GP) flips back to bust under the tighter 4-year window — expected,
+not a regression, same "one game short but time's up" logic as before.
+
+**Real numbers:** bust rate among conclusive round-1 skaters moved from
+31/177 (17.5%, 5-year debut clock) to 42/188 (**22.3%**, split 4-year/
+5-year clock) — the conclusive pool also grew (177->188) since more
+players now clear the shorter debuted-player window. Three tunings of
+the "enough time" clock in one afternoon (3yr flat -> 5yr debut-based ->
+4yr/5yr split), on top of two tunings of the bust bar itself (0 GP ->
+Meaningful -> Full-Time) — recommend treating both numbers as settled
+for now barring new evidence, rather than continuing to tune against a
+handful of individual examples.
+
 ## Decisions locked in
 
 1. No trophy/awards data required for v1 — Star tier is PPG-based only.
@@ -294,9 +340,10 @@ gone into content the same afternoon.
    exempt via the production path even under 200 GP), not "played at
    least once" or "reached Meaningful NHLer" — both tried and superseded
    same-day, 2026-07-17.
-4. The "enough time has passed" clock runs from NHL debut, not draft
-   year (falls back to draft year only if never debuted) — also fixed
-   2026-07-17, same afternoon, after the Full-Time change above shipped.
+4. The "enough time has passed" clock is split: 4 years from NHL debut
+   if the player has debuted, 5 years from draft year if they haven't.
+   Also tuned 2026-07-17, same afternoon, after the debut-based-clock
+   change above shipped.
 5. Goalie thresholds are scaled down from skater thresholds (50/150 GP
    instead of 100/200) to reflect lower per-season workload even at full
    NHL establishment. Flagged as the one number worth revisiting once
