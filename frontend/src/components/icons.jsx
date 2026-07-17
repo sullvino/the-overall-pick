@@ -53,3 +53,22 @@ export function IconBook() {
     </svg>
   )
 }
+
+export function IconMenu() {
+  return (
+    <svg {...common}>
+      <path d="M3 6h18" />
+      <path d="M3 12h18" />
+      <path d="M3 18h18" />
+    </svg>
+  )
+}
+
+export function IconX() {
+  return (
+    <svg {...common}>
+      <path d="M5 5l14 14" />
+      <path d="M19 5L5 19" />
+    </svg>
+  )
+}
