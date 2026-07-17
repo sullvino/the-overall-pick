@@ -218,6 +218,59 @@
     font-size: 15px;
     padding: 12px 10px;
   }
+
+  /* Scale down desktop type/spacing -- everything below was sized for a
+     1200px canvas and reads oversized at phone width otherwise. */
+  .page {
+    padding: 64px 16px 40px;
+  }
+
+  .page-header h1 {
+    font-size: 23px;
+  }
+
+  .page-header p {
+    font-size: 13px;
+  }
+
+  .chart-card {
+    padding: 16px;
+  }
+
+  .chart-card h3 {
+    font-size: 16px;
+  }
+
+  .chart-subtitle {
+    font-size: 12.5px;
+  }
+
+  .stat-tile {
+    padding: 12px;
+  }
+
+  .stat-tile-value {
+    font-size: 21px;
+  }
+
+  .stat-tile-label {
+    font-size: 10px;
+  }
+
+  .player-name {
+    font-size: 18px;
+  }
+
+  .section-heading {
+    font-size: 16px;
+    margin: 20px 0 10px;
+  }
+
+  .stat-grid,
+  .top-five-grid,
+  .chart-row {
+    gap: 10px;
+  }
 }
 
 .year-slider {
