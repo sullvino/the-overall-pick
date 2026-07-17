@@ -8,14 +8,14 @@ import { AIReportBuilderTab } from './tabs/AIReportBuilderTab'
 import { DefinitionsTab } from './tabs/DefinitionsTab'
 import { YearRangeSlider } from './components/YearRangeSlider'
 import { Sidebar } from './components/Sidebar'
-import { Logo } from './components/Logo'
+import { HeaderPattern } from './components/HeaderPattern'
 import './App.css'
 
 const TABS = [
-  { id: 'draft-table', label: 'Draft Table' },
+  { id: 'player-cards', label: 'Player Cards' },
   { id: 'by-team', label: 'By Team' },
   { id: 'draft-value', label: 'Draft Value' },
-  { id: 'player-cards', label: 'Player Cards' },
+  { id: 'draft-table', label: 'Draft Table' },
   { id: 'ai-report', label: 'AI Report Builder' },
   { id: 'definitions', label: 'Definitions' },
 ]
@@ -26,7 +26,7 @@ const TABS_WITH_YEAR_SLIDER = new Set(['draft-table', 'by-team', 'draft-value'])
 
 export default function App() {
   const { rows, error, loading } = useDraftData()
-  const [activeTab, setActiveTab] = useState('draft-table')
+  const [activeTab, setActiveTab] = useState('player-cards')
 
   const yearBounds = useMemo(() => {
     if (!rows || rows.length === 0) return [2015, 2025]
@@ -68,8 +68,8 @@ export default function App() {
 
       <div className="page">
         <header className="page-header">
+          <HeaderPattern />
           <div className="page-header-title">
-            <Logo size={22} />
             <h1>{TABS.find((t) => t.id === activeTab)?.label}</h1>
           </div>
           <p>

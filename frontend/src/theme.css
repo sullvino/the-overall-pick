@@ -22,6 +22,7 @@
   --gold-ui: #b8860b;
   --gold-wash: #f5ecd4; /* light gold-tinted background for active/highlighted UI */
   --gold-dark: #8a6008; /* deep gold for 2-series chart pairs alongside --gold; CVD ΔE 31.5 apart */
+  --text-on-ink: #93b9e0; /* light blue -- for text on the navy masthead background only, never on --page/--surface-1 */
 
   /* Status colors -- reserved for outcome-tier meaning, never reused as
      a plain chart series. --status-pending is a darkened fix from the

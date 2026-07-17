@@ -338,10 +338,25 @@
   color: var(--text-primary);
 }
 
+.page-header {
+  position: relative;
+  overflow: hidden;
+  background: var(--text-primary);
+  border-radius: 12px;
+  padding: 28px 32px;
+  margin-bottom: 24px;
+}
+
+.page-header-pattern {
+  position: absolute;
+  top: 50%;
+  right: -20px;
+  transform: translateY(-50%);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
 .page-header-title {
-  display: flex;
-  align-items: center;
-  gap: 10px;
   position: relative;
   padding-bottom: 10px;
 }
@@ -358,14 +373,19 @@
 }
 
 .page-header h1 {
+  position: relative;
   font-size: 30px;
   font-weight: 800;
   letter-spacing: -0.01em;
   margin: 0;
+  color: #ffffff;
 }
 
 .page-header p {
+  position: relative;
   font-size: 14px;
+  color: var(--text-on-ink);
+  margin-top: 4px;
 }
 
 .loading-banner,
