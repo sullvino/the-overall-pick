@@ -1,0 +1,54 @@
+/* "The Overall Pick" -- Draft Day (paper & ink). A single committed light
+   identity, not a light/dark pair -- see BRAND_STYLE_GUIDE_REVIEW.md for
+   the contrast/CVD validation behind every value here. */
+:root {
+  --surface-1: #ffffff;
+  --page: #f6f5f1;
+  --text-primary: #14213d;
+  --text-secondary: #4a5568;
+  --text-muted: #a0a0a0;
+  --gridline: #d8d5cc;
+  --baseline: #d8d5cc;
+  --border: #d8d5cc;
+  --hover: #efede6;
+  --stripe: #fbfaf7;
+  --good: #2f7d53;
+
+  /* Brand gold: reserve for large/decorative uses only (logo, button
+     fills with dark text on top). It fails text/thin-UI contrast at
+     full brightness -- use --gold-ui wherever the gold element itself
+     needs to be legible (active-state borders, icons). */
+  --gold: #d4a017;
+  --gold-ui: #b8860b;
+  --gold-wash: #f5ecd4; /* light gold-tinted background for active/highlighted UI */
+  --gold-dark: #8a6008; /* deep gold for 2-series chart pairs alongside --gold; CVD ΔE 31.5 apart */
+
+  /* Status colors -- reserved for outcome-tier meaning, never reused as
+     a plain chart series. --status-pending is a darkened fix from the
+     brand doc's #C9781E, which failed 4.5:1 text contrast (3.39:1). */
+  --status-good: #2f7d53;
+  --status-bad: #b03a2e;
+  --status-pending: #9c5f17;
+
+  /* Chart categorical set -- not specified in the brand doc (only the
+     accent + status trio were), so designed to extend it: navy/teal/
+     violet/berry, clear of the reserved gold and status hues. */
+  --series-1: #1d5aa8; /* navy-blue */
+  --series-2: #1d93a8; /* teal */
+  --series-3: #7b5ea7; /* violet */
+  --series-4: #a84b7c; /* berry */
+  --series-5: #4a7dc4; /* lighter blue */
+  --series-6: #b03a2e; /* = status-bad, already used for error/negative here */
+  --series-7: #c77ba0; /* lighter berry */
+  --series-8: #9c5f17; /* = status-pending */
+
+  /* Sequential ramp for heatmaps (e.g. Draft Table PPG cells), light -> dark.
+     Soft champagne gold: near-white at 0, topping out at medium-dark gold (not
+     bronze/orange). Single hue, low saturation throughout. */
+  --seq-0: #faf4e6;
+  --seq-1: #f0e2bc;
+  --seq-2: #e2c988;
+  --seq-3: #d1ac57;
+  --seq-4: #b8903a;
+  --seq-5: #9c7728;
+}

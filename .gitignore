@@ -1,0 +1,6 @@
+# Claude Code local settings (per-machine, not for the repo)
+.claude/
+
+# OS cruft
+.DS_Store
+Thumbs.db
