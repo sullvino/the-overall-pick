@@ -12,8 +12,8 @@ import { HeaderPattern } from './components/HeaderPattern'
 import './App.css'
 
 const TABS = [
-  { id: 'player-cards', label: 'Player Cards' },
-  { id: 'by-team', label: 'By Team' },
+  { id: 'player-cards', label: 'Players' },
+  { id: 'by-team', label: 'Teams' },
   { id: 'draft-value', label: 'Draft Value' },
   { id: 'draft-table', label: 'Draft Table' },
   { id: 'ai-report', label: 'AI Report Builder' },
