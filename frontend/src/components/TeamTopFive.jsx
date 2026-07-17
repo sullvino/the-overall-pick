@@ -41,7 +41,7 @@ export function TeamTopFive({ team }) {
         barColor="var(--series-6)"
         value={(p) => 33 - p.overall_pick}
         format={(_v, p) => `#${p.overall_pick} overall`}
-        sub={(p) => `${p.draft_year} · never played`}
+        sub={(p) => `${p.draft_year} · ${p.games_played ? `${p.games_played} GP, never a regular` : 'never played'}`}
       />
     </div>
   )
