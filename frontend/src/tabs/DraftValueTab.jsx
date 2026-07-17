@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { Bar, CartesianGrid, ComposedChart, Legend, Line, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { BUCKET_ORDER, eligibleYear as getEligibleYear, expectedValueByBucket } from '../lib/pickBucket'
 import { DraftProbabilityMatrix } from '../components/DraftProbabilityMatrix'
+import { DraftValueHeatmap } from '../components/DraftValueHeatmap'
 import { TEAM_NAMES, teamName } from '../lib/teamNames'
 
 const TEAM_ABBREVS = Object.keys(TEAM_NAMES).sort((a, b) => TEAM_NAMES[a].localeCompare(TEAM_NAMES[b]))
@@ -82,46 +83,42 @@ export function DraftValueTab({ rows, yearRange }) {
         ) : chartData.length === 0 ? (
           <p className="chart-empty">Not enough eligible picks yet to compute this.</p>
         ) : (
-          <ResponsiveContainer width="100%" height={360}>
-            <ComposedChart data={chartData} margin={{ top: 8, right: 16, left: 0, bottom: 40 }}>
-              <CartesianGrid stroke="var(--gridline)" vertical={false} />
-              <XAxis
-                dataKey="bucket"
-                stroke="var(--baseline)"
-                tick={{ fill: 'var(--text-secondary)', fontSize: 11 }}
-                angle={-30}
-                textAnchor="end"
-                height={60}
-              />
-              <YAxis stroke="var(--baseline)" tick={{ fill: 'var(--text-secondary)', fontSize: 12 }} width={44} />
-              <Tooltip content={<ValueTooltip selectedTeam={selectedTeam} />} cursor={{ fill: 'var(--gridline)' }} />
-              <Legend wrapperStyle={{ color: 'var(--text-secondary)', fontSize: 13 }} />
-              <Bar dataKey="Forward" fill="var(--gold-dark)" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="Defenseman" fill="var(--gold)" radius={[4, 4, 0, 0]} />
-              {selectedTeam && (
-                <Line
-                  type="monotone"
-                  dataKey="TeamForward"
-                  name={`${selectedTeam} Forward`}
-                  stroke="var(--series-1)"
-                  strokeWidth={2}
-                  dot={{ r: 4 }}
-                  connectNulls
-                />
-              )}
-              {selectedTeam && (
-                <Line
-                  type="monotone"
-                  dataKey="TeamDefenseman"
-                  name={`${selectedTeam} Defenseman`}
-                  stroke="var(--series-5)"
-                  strokeWidth={2}
-                  dot={{ r: 4 }}
-                  connectNulls
-                />
-              )}
-            </ComposedChart>
-          </ResponsiveContainer>
+          <div className="value-heatmap-chart-grid">
+            <DraftValueHeatmap data={chartData} />
+            <ResponsiveContainer width="100%" height={420}>
+              <ComposedChart data={chartData} layout="vertical" margin={{ top: 8, right: 24, left: 0, bottom: 8 }}>
+                <CartesianGrid stroke="var(--gridline)" horizontal={false} />
+                <XAxis type="number" stroke="var(--baseline)" tick={{ fill: 'var(--text-secondary)', fontSize: 12 }} />
+                <YAxis type="category" dataKey="bucket" stroke="var(--baseline)" tick={{ fill: 'var(--text-secondary)', fontSize: 11 }} width={90} />
+                <Tooltip content={<ValueTooltip selectedTeam={selectedTeam} />} cursor={{ fill: 'var(--gridline)' }} />
+                <Legend wrapperStyle={{ color: 'var(--text-secondary)', fontSize: 13 }} />
+                <Bar dataKey="Forward" fill="var(--gold-dark)" radius={[0, 4, 4, 0]} barSize={14} isAnimationActive={false} />
+                <Bar dataKey="Defenseman" fill="var(--gold)" radius={[0, 4, 4, 0]} barSize={14} isAnimationActive={false} />
+                {selectedTeam && (
+                  <Line
+                    type="monotone"
+                    dataKey="TeamForward"
+                    name={`${selectedTeam} Forward`}
+                    stroke="var(--series-1)"
+                    strokeWidth={2}
+                    dot={{ r: 4 }}
+                    connectNulls
+                  />
+                )}
+                {selectedTeam && (
+                  <Line
+                    type="monotone"
+                    dataKey="TeamDefenseman"
+                    name={`${selectedTeam} Defenseman`}
+                    stroke="var(--series-5)"
+                    strokeWidth={2}
+                    dot={{ r: 4 }}
+                    connectNulls
+                  />
+                )}
+              </ComposedChart>
+            </ResponsiveContainer>
+          </div>
         )}
         <TableView data={chartData} selectedTeam={selectedTeam} />
       </div>

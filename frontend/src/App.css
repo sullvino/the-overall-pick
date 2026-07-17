@@ -766,6 +766,60 @@
   color: var(--text-muted);
 }
 
+.value-heatmap-chart-grid {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .value-heatmap-chart-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.value-heatmap {
+  border-collapse: collapse;
+  font-size: 12.5px;
+  width: 100%;
+}
+
+.value-heatmap th {
+  text-align: center;
+  padding: 5px 8px;
+  color: var(--text-muted);
+  font-weight: 500;
+  border-bottom: 1px solid var(--gridline);
+}
+
+.value-heatmap th:first-child {
+  text-align: left;
+}
+
+.value-heatmap td {
+  padding: 6px 8px;
+  text-align: center;
+  border-bottom: 2px solid var(--surface-1);
+  border-right: 2px solid var(--surface-1);
+}
+
+.value-heatmap-row-label {
+  text-align: left !important;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.value-heatmap-val {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.value-heatmap-n {
+  font-size: 10px;
+  margin-top: 1px;
+}
+
 .player-search {
   font: inherit;
   font-size: 15px;
