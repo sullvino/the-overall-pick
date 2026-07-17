@@ -15,14 +15,14 @@ export function StatTile({ label, value, sub, sparkline, tone }) {
             <AreaChart data={sparkline.map((v, i) => ({ i, v }))} margin={{ top: 2, right: 0, left: 0, bottom: 0 }}>
               <defs>
                 <linearGradient id="sparklineFill" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="var(--series-1)" stopOpacity={0.35} />
-                  <stop offset="100%" stopColor="var(--series-1)" stopOpacity={0} />
+                  <stop offset="0%" stopColor="var(--gold)" stopOpacity={0.35} />
+                  <stop offset="100%" stopColor="var(--gold)" stopOpacity={0} />
                 </linearGradient>
               </defs>
               <Area
                 type="monotone"
                 dataKey="v"
-                stroke="var(--series-1)"
+                stroke="var(--gold)"
                 strokeWidth={1.5}
                 fill="url(#sparklineFill)"
                 connectNulls

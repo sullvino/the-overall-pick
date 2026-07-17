@@ -38,13 +38,12 @@ export function TeamDetail({ team, teamStats, years, compareTeam }) {
           </div>
         </div>
 
-        <div className="stat-grid stat-grid-6">
+        <div className="stat-grid stat-grid-5">
           <StatTile label="Total picks" value={team.totalPicks} sparkline={sparklines.picks} />
-          <StatTile label="Reached NHL" value={team.nhlers} sparkline={sparklines.nhlers} />
-          <StatTile label="Full-Time NHLers" value={team.fullTime} sparkline={sparklines.fullTime} />
-          <StatTile label="Stars" value={team.stars} sparkline={sparklines.stars} />
-          <StatTile label="Elite" value={team.elite} sparkline={sparklines.elite} />
-          <StatTile label="Hit rate" value={`${round1(team.hitRate)}%`} sub="Meaningful NHLer+" sparkline={sparklines.hitRate} />
+          <StatTile label="Reached NHL" value={team.nhlers} sub={pctOfSkaters(team.nhlers, team)} sparkline={sparklines.nhlers} />
+          <StatTile label="Full-Time NHLers" value={team.fullTime} sub={pctOfSkaters(team.fullTime, team)} sparkline={sparklines.fullTime} />
+          <StatTile label="Stars" value={team.stars} sub={pctOfSkaters(team.stars, team)} sparkline={sparklines.stars} />
+          <StatTile label="Elite" value={team.elite} sub={pctOfSkaters(team.elite, team)} sparkline={sparklines.elite} />
         </div>
       </div>
 
@@ -118,21 +117,22 @@ function buildSparklines(picks, yearList) {
   const fullTimePerYear = yearList.map((y) => byYear.get(y).filter((r) => r.skater_tier >= 3).length)
   const starsPerYear = yearList.map((y) => byYear.get(y).filter((r) => r.skater_tier === 4).length)
   const elitePerYear = yearList.map((y) => byYear.get(y).filter((r) => r.is_elite).length)
-  const hitRatePerYear = yearList.map((y) => {
-    const skaters = byYear.get(y).filter((r) => r.skater_tier !== null && r.skater_tier !== undefined)
-    if (skaters.length === 0) return null
-    return (skaters.filter((r) => r.skater_tier >= 2).length / skaters.length) * 100
-  })
   return {
     picks: picksPerYear,
     nhlers: nhlersPerYear,
     fullTime: fullTimePerYear,
     stars: starsPerYear,
     elite: elitePerYear,
-    hitRate: hitRatePerYear,
   }
 }
 
 function round1(n) {
   return Math.round(n * 10) / 10
+}
+
+// % of this team's skater-eligible picks that reached a given tier --
+// same denominator (skaterTotal) the By Team overview tiles already use.
+function pctOfSkaters(n, team) {
+  if (!team.skaterTotal) return null
+  return <span className="stat-tile-sub-dark">{round1((n / team.skaterTotal) * 100)}%</span>
 }

@@ -456,6 +456,11 @@
   margin-top: 2px;
 }
 
+.stat-tile-sub-dark {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
 .stat-tile-sparkline {
   width: 100%;
   height: 32px;
@@ -466,12 +471,17 @@
   grid-template-columns: repeat(4, 1fr);
 }
 
+.stat-grid-5 {
+  grid-template-columns: repeat(5, 1fr);
+}
+
 .stat-grid-6 {
   grid-template-columns: repeat(6, 1fr);
 }
 
 @media (max-width: 900px) {
   .stat-grid-4,
+  .stat-grid-5,
   .stat-grid-6 {
     grid-template-columns: repeat(2, 1fr);
   }
