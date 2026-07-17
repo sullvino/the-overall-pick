@@ -32,16 +32,19 @@ outcome tracking is planned but not built yet.*
 
 ## Still Developing
 
-Players drafted in the last few years haven't had time to reach these
-tiers yet, regardless of talent. We flag them as **Still Developing**
-rather than counting them as a miss — a pick from the last couple of
-draft classes with 0 NHL games so far isn't a bust, they just haven't had
-the chance yet.
+Players drafted in the last 5 years haven't necessarily had time to reach
+Meaningful NHLer (100+ games) yet, regardless of talent. We flag them as
+**Still Developing** rather than counting them as a miss — a recent pick
+who hasn't cleared that bar yet just hasn't had the chance, not a bust.
 
 ## 1st Round Bust
 
-A first-round pick who never played a single NHL game, once enough time
-has passed for that to be a conclusive outcome rather than a still-developing one.
+A first-round pick who never became a Meaningful NHLer (under 100 career
+games), once 5 years have passed for that to be a conclusive outcome
+rather than a still-developing one. We use the Meaningful NHLer bar
+rather than "never played a single game" — a first-rounder who got a
+handful of call-ups and never stuck is still a bust, not a "hit" just
+because they technically played once.
 
 ## Expected value
 

@@ -98,26 +98,72 @@ confirmed via grep before dropping.
 
 ## Handling recent draft years — don't let this get miscounted as "bust"
 
-Any player drafted in the last ~3-4 years hasn't had time to reach these
-thresholds yet, regardless of talent. Recommend a distinct status,
-separate from "didn't make it":
+Any player drafted recently hasn't necessarily had time to reach these
+thresholds yet, regardless of talent. Distinct status, separate from
+"didn't make it":
 
-- **"Still Developing"** — drafted within the last N years (suggest N=4)
-  AND hasn't yet cleared Tier 1. Show this instead of counting them as a
-  bust in any outcome-rate calculation.
-- Everything Tier 1 and above is a real, current outcome regardless of
-  draft year — only the *absence* of an outcome needs the "too early to
+- **"Still Developing"** — drafted within the last 5 years AND hasn't yet
+  cleared Tier 2 (Meaningful NHLer, 100+ GP). Show this instead of
+  counting them as a bust in any outcome-rate calculation. (Widened from
+  Tier 1 / 3 years to Tier 2 / 5 years on 2026-07-17 — see below.)
+- Everything Tier 2 and above is a real, current outcome regardless of
+  draft year — only the *absence* of that outcome needs the "too early to
   tell" caveat.
 
 ## Handling "bust" as its own explicit category
 
 **Decided: "1st Round Bust"** — drafted in round 1 AND never reached
-Tier 1 (Played 1 NHL Game), with the same "enough time has passed" caveat
-from above (don't flag a 2023-2025 first-rounder as a bust yet — they may
-just still be developing).
+Tier 2 (Meaningful NHLer, 100+ GP), with the same "enough time has
+passed" caveat from above.
 
-`is_first_round_bust` = `round = 1` AND `career_gp` is NULL/0 AND
+`is_first_round_bust` = `round = 1` AND `career_gp < 100` AND
 draft_year is old enough to be conclusive (see "Still Developing" above).
+
+## Bust bar raised from "never played" to "never reached Meaningful NHLer" (2026-07-17)
+
+Original definition (`career_gp = 0`) was too low a bar once the target
+audience is specifically round-1 picks. Found while mocking up a piece of
+social content ("what does history say about pick 17") that used the old
+definition — pick 17 had zero true busts since 2015, which undersold a
+much more interesting story underneath it.
+
+**Real numbers that drove the change** — 207 eligible round-1 skater
+picks (2015-2021, old 3-year eligibility window): 7 had zero career
+games (3.4%), but 39 more played *something* and never reached 100 GP
+(18.8%) — invisible to the old definition entirely. A first-rounder who
+gets a 15-game cup of coffee and never sticks reads as a bust to any
+hockey fan; the old definition was counting him as a non-bust purely
+because he "played."
+
+**Fix:** reuse the existing Meaningful NHLer bar (`career_gp >= 100`)
+that the tier system already defines and explains — no new number to
+justify, and it's the same bar already documented as "stuck around, not
+just a call-up." New bust rate: 33/179 conclusive round-1 skaters =
+18.4% (using the widened 5-year window below), a far more honest "roughly
+1 in 5 first-rounders bust" story than the old 3.4%.
+
+**Also widened the "enough time has passed" window from 3 years to 5**,
+to match `eligibleYear()` (the window already used everywhere else in the
+app for production judgments — expected value, VOE). Reasoning: proving
+"never played a single game" is fast to determine (most players who will
+ever play do so within 2-3 pro seasons), but proving "never reached 100
+GP" genuinely takes longer — a player bouncing between the NHL/AHL at 60
+GP by year 3 could plausibly cross 100 GP by year 4-5 with a full-time
+role. Keeping the old 3-year window with the new higher bar risked
+prematurely judging players who were still legitimately developing.
+`is_still_developing` was updated the same way (GP threshold and window
+both), since it's the direct logical complement of `is_first_round_bust`
+— even though `is_still_developing` isn't currently read by the frontend,
+keeping the pair consistent matters for anyone building against the view
+later.
+
+Alternative considered and rejected: splitting into two categories (keep
+"1st Round Bust" as the 0-GP case, add a separate "Never Stuck"/"Cup of
+Coffee" category for the 1-99 GP case). More nuanced, but adds a new
+label and a UI decision (does Team Top Five's Busts panel show one
+category or both) for marginal benefit over just moving the existing
+line. Revisit if the single-category version turns out to hide
+interesting cases.
 
 ## Decisions locked in
 
@@ -125,7 +171,8 @@ draft_year is old enough to be conclusive (see "Still Developing" above).
 2. "Full-Time NHLer" seasons don't need to be consecutive — any 3 seasons
    across a career count.
 3. Bust is defined as **1st Round Bust** specifically (not top-15 or
-   broader) — see above.
+   broader) — see above. Bar is Meaningful NHLer (100+ GP), not "played at
+   least once," as of 2026-07-17.
 4. Goalie thresholds are scaled down from skater thresholds (50/150 GP
    instead of 100/200) to reflect lower per-season workload even at full
    NHL establishment. Flagged as the one number worth revisiting once
