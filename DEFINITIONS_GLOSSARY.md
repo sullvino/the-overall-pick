@@ -20,6 +20,7 @@ reaches "Elite" also counts for every tier below it.
 **Star**, specifically:
 - Forwards need a career pace of 0.6+ points per game (roughly 50 points over a full season)
 - Defensemen need 0.4+ points per game — defensemen top out lower as scorers, so a 0.4 PPG blueliner is a genuine difference-maker
+- Also requires the 100-game floor from Meaningful NHLer — a scorching 10-game stretch doesn't count as a Star-level pace
 
 **Elite**, specifically:
 - Forwards need a career pace of 0.9+ points per game (roughly 74 points over a full season)
