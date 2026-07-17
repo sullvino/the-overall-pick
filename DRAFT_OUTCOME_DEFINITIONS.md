@@ -103,21 +103,27 @@ thresholds yet, regardless of talent. Distinct status, separate from
 "didn't make it":
 
 - **"Still Developing"** — drafted within the last 5 years AND hasn't yet
-  cleared Tier 2 (Meaningful NHLer, 100+ GP). Show this instead of
-  counting them as a bust in any outcome-rate calculation. (Widened from
-  Tier 1 / 3 years to Tier 2 / 5 years on 2026-07-17 — see below.)
-- Everything Tier 2 and above is a real, current outcome regardless of
-  draft year — only the *absence* of that outcome needs the "too early to
-  tell" caveat.
+  reached Full-Time NHLer or Star/Elite (see "Handling bust" below for
+  the exact either/or condition). Show this instead of counting them as a
+  bust in any outcome-rate calculation. (Bar moved twice on 2026-07-17 —
+  Tier 1/3yr -> Tier 2/5yr -> Full-Time-or-Star/5yr — see the dated
+  sections below for why.)
+- Everything Full-Time NHLer or Star/Elite is a real, current outcome
+  regardless of draft year — only the *absence* of that outcome needs the
+  "too early to tell" caveat.
 
 ## Handling "bust" as its own explicit category
 
 **Decided: "1st Round Bust"** — drafted in round 1 AND never reached
-Tier 2 (Meaningful NHLer, 100+ GP), with the same "enough time has
-passed" caveat from above.
+Full-Time NHLer *or* Star/Elite (either path counts as clearing it — see
+the 2026-07-17 section below for why both paths matter and the exact
+SQL), with the same "enough time has passed" caveat from above.
 
-`is_first_round_bust` = `round = 1` AND `career_gp < 100` AND
-draft_year is old enough to be conclusive (see "Still Developing" above).
+Current state as of 2026-07-17 (see dated sections below for the full
+path here — this was tried twice before landing):
+`is_first_round_bust` = `round = 1` AND NOT (Star/Elite production bar
+OR Full-Time's 200-GP/3-season floor) AND draft_year old enough to be
+conclusive (5 years).
 
 ## Bust bar raised from "never played" to "never reached Meaningful NHLer" (2026-07-17)
 
@@ -165,14 +171,75 @@ category or both) for marginal benefit over just moving the existing
 line. Revisit if the single-category version turns out to hide
 interesting cases.
 
+**Superseded same-day** — see below, bar moved again to Full-Time NHLer
+before this had even shipped to content.
+
+## Bust bar raised again: Meaningful NHLer -> Full-Time NHLer (2026-07-17, later same day)
+
+User's own read on the Meaningful-NHLer version: still too low a bar.
+Concrete example: Ty Smith (2018, NJD, 131 GP, 0.374 PPG) — a legitimate
+NHL depth defenseman who never became a true regular — was still reading
+as "not a bust" because 131 > 100. For a first-round pick specifically,
+"stuck around as a fringe/depth player" isn't a hit.
+
+**New bar: `skater_tier >= 3` (Full-Time NHLer) required to avoid being
+called a bust** — i.e. 200+ GP across 3+ distinct seasons, OR Star/Elite
+(see exemption below). `is_first_round_bust` = round 1 AND does NOT meet
+either the Full-Time GP/season floor or the Star/Elite production bar,
+AND draft_year old enough to be conclusive (still the 5-year window).
+
+**Critical exemption found while implementing, not before:** pulled every
+round-1 skater sitting at 100-199 GP to sanity-check the new bar before
+shipping it, and found Brandt Clarke (2021, D, 185 GP, 4 seasons) already
+graded `Star` tier — elite production, just hasn't hit Full-Time's raw
+200-game floor yet (early-career stars often clear the *production* bar
+before the *game-count* bar catches up). A naive `games_played < 200`
+condition would have called a proven Star-level player a "bust" on a
+games-played technicality. Fixed by checking both paths and only
+flagging a bust if *neither* is satisfied:
+
+```
+NOT (
+  (games >= 100 AND position-adjusted PPG clears the Star bar)   -- Star/Elite path
+  OR
+  (games >= 200 AND distinct_seasons >= 3)                        -- Full-Time path
+)
+```
+
+This works because `skater_tier`'s own CASE expression already checks
+the Star condition *before* the Full-Time condition (first match wins),
+so a player can legitimately be tier 4 without tier 3's game count ever
+being satisfied — the bust check has to mirror that same either/or
+structure, not just negate the Full-Time condition alone.
+
+**Also checked whether the 5-year "enough time" window needed extending
+again** (Full-Time requires even more games than Meaningful, so intuition
+says it might need longer) — decided no. Pulled every round-1 skater
+sitting at 100-199 GP: several (Dennis Cholowski, Alex Nylander, Liam
+Foudy, Tobias Bjornfot) already have 5-7 *distinct NHL seasons* without
+cracking 200 total games. That's not "hasn't had enough calendar time" —
+that's already-observed evidence of a marginal/fringe career (waivers,
+AHL time, injury-shortened seasons). More elapsed time wouldn't change
+that verdict, so the window stayed at 5 years.
+
+**Real numbers:** bust rate among 179 conclusive round-1 skaters jumped
+from 33 (18.4%, Meaningful-anchored) to 54 (**30.2%**, Full-Time-anchored)
+— close to the commonly-cited "roughly a third of first-rounders bust"
+folklore, which reads as the most externally-credible number of the three
+versions tried today. Verified live: Ty Smith flips to bust as intended;
+Brandt Clarke correctly stays a non-bust; Kyle Connor/Dante Fabbro
+(pick-17 examples from earlier) unaffected.
+
 ## Decisions locked in
 
 1. No trophy/awards data required for v1 — Star tier is PPG-based only.
 2. "Full-Time NHLer" seasons don't need to be consecutive — any 3 seasons
    across a career count.
 3. Bust is defined as **1st Round Bust** specifically (not top-15 or
-   broader) — see above. Bar is Meaningful NHLer (100+ GP), not "played at
-   least once," as of 2026-07-17.
+   broader) — see above. Bar is Full-Time NHLer or better (Star/Elite
+   exempt via the production path even under 200 GP), not "played at
+   least once" or "reached Meaningful NHLer" — both tried and superseded
+   same-day, 2026-07-17.
 4. Goalie thresholds are scaled down from skater thresholds (50/150 GP
    instead of 100/200) to reflect lower per-season workload even at full
    NHL establishment. Flagged as the one number worth revisiting once

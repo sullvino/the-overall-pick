@@ -33,18 +33,26 @@ outcome tracking is planned but not built yet.*
 ## Still Developing
 
 Players drafted in the last 5 years haven't necessarily had time to reach
-Meaningful NHLer (100+ games) yet, regardless of talent. We flag them as
+Full-Time NHLer or Star yet, regardless of talent. We flag them as
 **Still Developing** rather than counting them as a miss — a recent pick
 who hasn't cleared that bar yet just hasn't had the chance, not a bust.
 
 ## 1st Round Bust
 
-A first-round pick who never became a Meaningful NHLer (under 100 career
-games), once 5 years have passed for that to be a conclusive outcome
-rather than a still-developing one. We use the Meaningful NHLer bar
-rather than "never played a single game" — a first-rounder who got a
-handful of call-ups and never stuck is still a bust, not a "hit" just
-because they technically played once.
+A first-round pick who never became a Full-Time NHLer or better (Star and
+Elite both count, even if they haven't hit the raw games total yet — see
+below), once 5 years have passed for that to be a conclusive outcome
+rather than a still-developing one. A first-rounder who's stuck around as
+a depth/role player but never became a true regular is still a bust —
+merely reaching the NHL, or even sticking as a "meaningful" 100-game
+player, isn't enough to call a first-round pick a hit.
+
+**Why Star/Elite still count even under 200 games:** a player can be an
+elite producer without yet reaching Full-Time NHLer's 200-game floor —
+early-career stars often clear the production bar before the raw game
+count catches up. We check both paths (Full-Time's game/season
+requirement, or Star/Elite's production bar) and only call it a bust if
+neither is met.
 
 ## Expected value
 
