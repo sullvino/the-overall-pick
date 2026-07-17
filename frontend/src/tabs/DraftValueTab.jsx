@@ -58,7 +58,7 @@ export function DraftValueTab({ rows, yearRange }) {
       <div className="chart-card">
         <h3>Draft value — expected points per 82 games</h3>
         <p className="chart-subtitle">
-          Average effective PPG × 82, by pick bucket and position. Includes busts as 0 (true expected value, not "how good are the hits").
+          Average effective PPG × 82, by pick bucket and position. Includes players who never played an NHL game as 0 (true expected value, not just how good the ones who made it were).
           Draft years {effectiveMin}&ndash;{effectiveMax}
           {clamped ? ` (clamped from the slider's ${yearRange[0]}–${yearRange[1]} — classes after ${eligibleYear} are excluded, not enough time to be conclusive yet)` : ' (recent classes excluded — not enough time to be conclusive yet)'}.
           {selectedTeam ? ` Lines show ${possessive(teamName(selectedTeam))} own actual pts/82 per bucket, against the league baseline.` : ''}

@@ -72,11 +72,12 @@ For any given draft slot, "expected value" is the average production
 we'd see if that pick were made over and over across many draft years —
 it answers *"if I have pick 20, what should I realistically expect?"*
 
-This includes every bust as a zero, not just the hits — a slot that
-occasionally produces a real star but mostly busts still has more
-expected value than one that never produces anything, and averaging in
-the busts is what keeps this an honest expectation rather than just
-"how good are the success stories."
+This includes every player who never played an NHL game as a zero, not
+just the hits — a slot that occasionally produces a real star but sees
+most of its picks never make the NHL still has more expected value than
+one that never produces anything, and averaging in those zeros is what
+keeps this an honest expectation rather than just "how good are the
+success stories."
 
 Expected value is calculated separately for forwards and defensemen,
 since they score at very different rates, and shown as points per 82
