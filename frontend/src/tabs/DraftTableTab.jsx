@@ -90,9 +90,10 @@ export function DraftTableTab({ rows, yearRange }) {
       </div>
 
       <div className="chart-card draft-table-card">
-        <h3>Draft table — Round {round}</h3>
+        <h3>Browse the draft — Round {round}</h3>
         <p className="chart-subtitle">
-          Pick within round (rows) by draft year (columns). Cell color = points-per-game (0 if never an NHLer).
+          Every pick, round by round, year by year — hover a name for their stats. This is the lookup tool; for
+          trends and analysis by pick range, see Draft Value. Cell color = points-per-game (0 if never an NHLer).
         </p>
         <div className="draft-table-scroll">
           <table className="draft-table">
