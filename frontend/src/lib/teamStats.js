@@ -1,8 +1,9 @@
 import { pickBucket, positionGroup, eligibleYear, expectedValueByBucket, effectivePts82 } from './pickBucket'
 
-// Per-team aggregate stats across the full dataset, used both for the team
-// drill-down and for ranking one team against all others. Independent of any
-// UI-level year/position filter -- a team's page should show its whole record.
+// Per-team aggregate stats, used both for the team drill-down and for
+// ranking one team against all others. Callers pass whatever rows should be
+// in scope -- e.g. already filtered by the page's year/position controls --
+// so the drill-down and the ranking are always computed on the same set.
 export function computeTeamStats(rows) {
   const expected = expectedValueByBucket(rows)
   const eligible = eligibleYear()

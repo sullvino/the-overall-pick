@@ -7,15 +7,25 @@ import { TeamDetail } from '../components/TeamDetail'
 import { computeTeamStats } from '../lib/teamStats'
 import { teamName } from '../lib/teamNames'
 
-export function ByTeamTab({ rows, years, yearRange }) {
+export function ByTeamTab({ rows, yearRange }) {
   const [filters, setFilters] = useState({ position: 'ALL' })
   const [selectedTeam, setSelectedTeam] = useState('')
   const [compareTeamAbbrev, setCompareTeamAbbrev] = useState('')
 
-  // Team drill-down deliberately ignores both the Position filter and the
-  // global year slider -- a team's page should show its whole record, not be
-  // silently clipped by controls meant for the league-wide overview chart.
-  const teamStats = useMemo(() => computeTeamStats(rows), [rows])
+  const filtered = useMemo(() => {
+    return rows.filter((r) => {
+      if (r.draft_year < yearRange[0] || r.draft_year > yearRange[1]) return false
+      if (filters.position !== 'ALL' && r.position !== filters.position) return false
+      return true
+    })
+  }, [rows, filters, yearRange])
+
+  const byTeam = useMemo(() => aggregateBy(filtered, (r) => r.team_abbrev), [filtered])
+
+  // Team drill-down now respects the same year/position filters as the
+  // league-wide overview above it -- the whole page reflects one filtered
+  // view, not a mix of filtered and unfiltered sections.
+  const teamStats = useMemo(() => computeTeamStats(filtered), [filtered])
   const teamAbbrevs = useMemo(() => teamStats.map((t) => t.abbrev).sort((a, b) => teamName(a).localeCompare(teamName(b))), [teamStats])
   const selectedTeamStats = useMemo(() => teamStats.find((t) => t.abbrev === selectedTeam) || null, [teamStats, selectedTeam])
   const compareTeamStats = useMemo(() => teamStats.find((t) => t.abbrev === compareTeamAbbrev) || null, [teamStats, compareTeamAbbrev])
@@ -29,16 +39,6 @@ export function ByTeamTab({ rows, years, yearRange }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [teamAbbrevs])
-
-  const filtered = useMemo(() => {
-    return rows.filter((r) => {
-      if (r.draft_year < yearRange[0] || r.draft_year > yearRange[1]) return false
-      if (filters.position !== 'ALL' && r.position !== filters.position) return false
-      return true
-    })
-  }, [rows, filters, yearRange])
-
-  const byTeam = useMemo(() => aggregateBy(filtered, (r) => r.team_abbrev), [filtered])
 
   const skaterRows = useMemo(() => filtered.filter((r) => r.skater_tier !== null && r.skater_tier !== undefined), [filtered])
   const totals = useMemo(() => {
@@ -97,7 +97,7 @@ export function ByTeamTab({ rows, years, yearRange }) {
       </div>
 
       {selectedTeamStats && (
-        <TeamDetail team={selectedTeamStats} teamStats={teamStats} years={years} compareTeam={compareTeamStats} />
+        <TeamDetail team={selectedTeamStats} teamStats={teamStats} years={yearRange} compareTeam={compareTeamStats} />
       )}
     </div>
   )

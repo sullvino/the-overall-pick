@@ -83,7 +83,7 @@ export default function App() {
 
         <main>
           {activeTab === 'draft-table' && <DraftTableTab rows={rows} yearRange={effectiveYearRange} />}
-          {activeTab === 'by-team' && <ByTeamTab rows={rows} years={yearBounds} yearRange={effectiveYearRange} />}
+          {activeTab === 'by-team' && <ByTeamTab rows={rows} yearRange={effectiveYearRange} />}
           {activeTab === 'draft-value' && <DraftValueTab rows={rows} yearRange={effectiveYearRange} />}
           {activeTab === 'player-cards' && <PlayerCardTab rows={rows} />}
           {activeTab === 'ai-report' && <AIReportBuilderTab />}
