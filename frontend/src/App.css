@@ -274,51 +274,35 @@
 }
 
 .year-slider {
-  background: var(--surface-1);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 12px 16px;
-  margin-top: 16px;
-  max-width: 420px;
-}
-
-.year-slider-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  margin-bottom: 8px;
-}
-
-.year-slider-title {
-  font-size: 13px;
-  color: var(--text-secondary);
-}
-
-.year-slider-value {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--text-primary);
-  font-variant-numeric: tabular-nums;
-}
-
-.year-slider-row {
   display: flex;
   align-items: center;
   gap: 10px;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 14px;
+  margin-bottom: 20px;
+  max-width: 480px;
 }
 
-.year-slider-row + .year-slider-row {
-  margin-top: 4px;
-}
-
-.year-slider-tag {
+.year-slider-title {
   font-size: 12px;
-  color: var(--text-muted);
-  width: 34px;
+  color: var(--text-secondary);
+  white-space: nowrap;
   flex-shrink: 0;
 }
 
-.year-slider-row input[type='range'] {
+.year-slider-tag {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+  width: 34px;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.year-slider input[type='range'] {
   flex: 1;
   accent-color: #262523;
 }
@@ -329,9 +313,11 @@
   color: var(--text-secondary);
   background: transparent;
   border: none;
-  padding: 6px 0 0;
+  padding: 0;
   cursor: pointer;
   text-decoration: underline;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .year-slider-reset:hover {

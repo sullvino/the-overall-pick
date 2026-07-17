@@ -75,10 +75,11 @@ export default function App() {
           <p>
             {rows.length.toLocaleString()} picks loaded, {yearBounds[0]}&ndash;{yearBounds[1]}
           </p>
-          {TABS_WITH_YEAR_SLIDER.has(activeTab) && (
-            <YearRangeSlider min={yearBounds[0]} max={yearBounds[1]} value={effectiveYearRange} onChange={setYearRange} />
-          )}
         </header>
+
+        {TABS_WITH_YEAR_SLIDER.has(activeTab) && (
+          <YearRangeSlider min={yearBounds[0]} max={yearBounds[1]} value={effectiveYearRange} onChange={setYearRange} />
+        )}
 
         <main>
           {activeTab === 'draft-table' && <DraftTableTab rows={rows} yearRange={effectiveYearRange} />}
