@@ -230,6 +230,60 @@ versions tried today. Verified live: Ty Smith flips to bust as intended;
 Brandt Clarke correctly stays a non-bust; Kyle Connor/Dante Fabbro
 (pick-17 examples from earlier) unaffected.
 
+**Superseded within the hour** — see below, the "enough time" clock
+itself had a bug that inflated this 30.2% number.
+
+## Bust clock moved from draft year to NHL debut year (2026-07-17, same afternoon)
+
+Two real issues surfaced from a single user report, both from reviewing
+actual flagged busts on the live site:
+
+**(a) UI bug, not a definition bug:** `TeamTopFive.jsx`'s Busts panel
+sub-text hardcoded `"${draft_year} · never played"` for every row — a
+leftover from when that was literally true (the original 0-GP
+definition). After two threshold changes today, most busts *did* play
+just not enough — showing "never played" next to a guy with 76 or 181
+career games was actively misleading. Fixed to show the real GP count,
+falling back to "never played" only when actually true.
+
+**(b) Real definitional gap:** Shakir Mukhamadullin (2020 NJD, pick 20)
+was flagged a conclusive bust at 83 GP. His actual season log: 3 GP
+(2023-24) -> 30 GP (2024-25) -> 50 GP (2025-26) — a clear, still-climbing
+trajectory. He debuted **three years after** being drafted (common for
+defensemen and players developing overseas before turning pro) and the
+old logic measured "5 years since draft" regardless — punishing him for
+years he spent before ever getting an NHL look, not years spent failing
+to stick once he arrived.
+
+**Fix:** `is_still_developing` / `is_first_round_bust` now measure the
+5-year window from each player's NHL debut season (first season with
+`games_played > 0` in `skater_season_stats`, via a new `debut` subquery
+joined the same way as the existing `season_counts` one), falling back
+to `draft_year` only when the player has never debuted at all — that
+case still needs a clock, and draft year is the only one available.
+
+Checked this doesn't reverse the two cases the user had just confirmed
+correct: Ty Smith (debut 2020) and Julien Gauthier (debut 2019) both
+debuted early enough that they're unaffected — still conclusive busts.
+One legitimate side effect: Lukas Reichel (debut 2021, sitting at 198 of
+200 GP) also flips to Still Developing. Not a regression — "one game
+short of Full-Time NHLer, give him a real chance to cross it" is a more
+honest read than "bust" for a player that close.
+
+**Real numbers, and a bigger swing than expected:** bust rate among the
+*truly* conclusive round-1 skaters dropped from 54/179 (30.2%, pure
+draft-year clock) to 31/177 (17.5%, debut-based clock). Investigated
+before trusting this — pulled every round-1 skater whose debut lagged
+their draft year by 3+ seasons to check for a data problem. Found none;
+these are real, fairly common cases (Olli Juolevi, Cal Foote, Nils
+Lundkvist, Pierre-Olivier Joseph — all well-known "slow burn" defensive
+prospects with genuine multi-year paths to the NHL). The swing is
+because a meaningful chunk of the 2015-2020 cohort are defensemen/depth
+forwards who debuted late and are only now approaching their own
+5-year mark, not because the fix is too lenient. Flagged explicitly to
+the user since it's a materially different number than what had already
+gone into content the same afternoon.
+
 ## Decisions locked in
 
 1. No trophy/awards data required for v1 — Star tier is PPG-based only.
@@ -240,7 +294,10 @@ Brandt Clarke correctly stays a non-bust; Kyle Connor/Dante Fabbro
    exempt via the production path even under 200 GP), not "played at
    least once" or "reached Meaningful NHLer" — both tried and superseded
    same-day, 2026-07-17.
-4. Goalie thresholds are scaled down from skater thresholds (50/150 GP
+4. The "enough time has passed" clock runs from NHL debut, not draft
+   year (falls back to draft year only if never debuted) — also fixed
+   2026-07-17, same afternoon, after the Full-Time change above shipped.
+5. Goalie thresholds are scaled down from skater thresholds (50/150 GP
    instead of 100/200) to reflect lower per-season workload even at full
    NHL establishment. Flagged as the one number worth revisiting once
    real goalie data volume is visible.

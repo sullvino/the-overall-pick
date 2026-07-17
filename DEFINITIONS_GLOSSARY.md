@@ -33,16 +33,21 @@ outcome tracking is planned but not built yet.*
 
 ## Still Developing
 
-Players drafted in the last 5 years haven't necessarily had time to reach
-Full-Time NHLer or Star yet, regardless of talent. We flag them as
-**Still Developing** rather than counting them as a miss — a recent pick
-who hasn't cleared that bar yet just hasn't had the chance, not a bust.
+Players haven't necessarily had time to reach Full-Time NHLer or Star
+yet, regardless of talent. We flag them as **Still Developing** rather
+than counting them as a miss — the 5-year clock starts at a player's
+first NHL game, not their draft day, since some prospects (especially
+defensemen, and those developing overseas) don't reach the NHL for
+several years after being drafted. A player who hasn't debuted at all
+yet is judged from their draft year instead, since there's no debut to
+count from.
 
 ## 1st Round Bust
 
 A first-round pick who never became a Full-Time NHLer or better (Star and
 Elite both count, even if they haven't hit the raw games total yet — see
-below), once 5 years have passed for that to be a conclusive outcome
+below), once 5 years have passed since their NHL debut (or since being
+drafted, if they never debuted) for that to be a conclusive outcome
 rather than a still-developing one. A first-rounder who's stuck around as
 a depth/role player but never became a true regular is still a bust —
 merely reaching the NHL, or even sticking as a "meaningful" 100-game
