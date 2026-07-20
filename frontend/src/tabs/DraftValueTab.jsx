@@ -96,24 +96,24 @@ export function DraftValueTab({ rows, yearRange }) {
                 <Bar dataKey="Defenseman" fill="var(--gold)" radius={[0, 4, 4, 0]} barSize={14} isAnimationActive={false} />
                 {selectedTeam && (
                   <Line
-                    type="monotone"
                     dataKey="TeamForward"
                     name={`${selectedTeam} Forward`}
                     stroke="var(--series-1)"
-                    strokeWidth={2}
-                    dot={{ r: 4 }}
-                    connectNulls
+                    strokeWidth={0}
+                    legendType="circle"
+                    dot={{ r: 5, fill: 'var(--series-1)', stroke: 'var(--surface-1)', strokeWidth: 1.5 }}
+                    isAnimationActive={false}
                   />
                 )}
                 {selectedTeam && (
                   <Line
-                    type="monotone"
                     dataKey="TeamDefenseman"
                     name={`${selectedTeam} Defenseman`}
                     stroke="var(--series-5)"
-                    strokeWidth={2}
-                    dot={{ r: 4 }}
-                    connectNulls
+                    strokeWidth={0}
+                    legendType="circle"
+                    dot={{ r: 5, fill: 'var(--series-5)', stroke: 'var(--surface-1)', strokeWidth: 1.5 }}
+                    isAnimationActive={false}
                   />
                 )}
               </ComposedChart>
