@@ -73,15 +73,16 @@ export function PlayerCardTab({ rows }) {
   // once (independent of the selected player) from every skater's season rows.
   const leagueAverages = useMemo(() => {
     if (!allSeasonStats) return []
-    const groups = new Map() // `${season}|${positionGroup}` -> {ppgSum, p60Sum, n}
+    const groups = new Map() // `${season}|${positionGroup}` -> {ppgSum, p60Sum, gpSum, n}
     for (const s of allSeasonStats) {
       if (!s.games_played) continue
       const group = positionByPlayerId.get(s.player_id)
       if (!group) continue
       const key = `${s.season}|${group}`
-      if (!groups.has(key)) groups.set(key, { season: s.season, positionGroup: group, ppgSum: 0, p60Sum: 0, p60N: 0, n: 0 })
+      if (!groups.has(key)) groups.set(key, { season: s.season, positionGroup: group, ppgSum: 0, p60Sum: 0, p60N: 0, gpSum: 0, n: 0 })
       const g = groups.get(key)
       g.ppgSum += s.points / s.games_played
+      g.gpSum += s.games_played
       g.n += 1
       if (s.toi_per_game_sec) {
         g.p60Sum += (s.points * 3600) / (s.games_played * s.toi_per_game_sec)
@@ -93,6 +94,7 @@ export function PlayerCardTab({ rows }) {
       positionGroup: g.positionGroup,
       avgPpg: g.ppgSum / g.n,
       avgP60: g.p60N ? g.p60Sum / g.p60N : null,
+      avgGp: g.gpSum / g.n,
     }))
   }, [allSeasonStats, positionByPlayerId])
 

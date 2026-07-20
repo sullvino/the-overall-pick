@@ -30,10 +30,15 @@ export function PlayerSeasonChart({
         season: formatSeason(key),
         ppg: p ? round2(p.points / p.games_played) : null,
         p60: p && p.toi_per_game_sec ? round2((p.points * 3600) / (p.games_played * p.toi_per_game_sec)) : null,
+        gp: p ? p.games_played : null,
+        goals: p ? p.goals : null,
+        assists: p ? p.assists : null,
         comparePpg: c ? round2(c.points / c.games_played) : null,
         compareP60: c && c.toi_per_game_sec ? round2((c.points * 3600) / (c.games_played * c.toi_per_game_sec)) : null,
+        compareGp: c ? c.games_played : null,
         leagueAvgPpg: leagueAvg ? round2(leagueAvg.avgPpg) : null,
         leagueAvgP60: leagueAvg ? round2(leagueAvg.avgP60) : null,
+        leagueAvgGp: leagueAvg ? round2(leagueAvg.avgGp) : null,
       }
     })
 
@@ -65,6 +70,41 @@ export function PlayerSeasonChart({
         comparePlayerName={comparePlayerName}
         unit="pts/60"
       />
+      <MiniLineChart
+        title="Games played, by season"
+        data={data}
+        dataKey="gp"
+        compareKey="compareGp"
+        leagueKey="leagueAvgGp"
+        comparePlayerName={comparePlayerName}
+        unit="GP"
+      />
+      <ScoringSplitChart data={data} />
+    </div>
+  )
+}
+
+// Goals vs. assists for the selected player only -- a scoring-style shape
+// over a career, not a vs.-context comparison like the other three charts,
+// so no league average / round average / compare-player lines here.
+function ScoringSplitChart({ data }) {
+  return (
+    <div className="chart-card">
+      <h3>Goals vs. assists, by season</h3>
+      <ResponsiveContainer width="100%" height={240}>
+        <LineChart data={data} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
+          <CartesianGrid stroke="var(--gridline)" vertical={false} />
+          <XAxis dataKey="season" stroke="var(--baseline)" tick={{ fill: 'var(--text-secondary)', fontSize: 11 }} />
+          <YAxis stroke="var(--baseline)" tick={{ fill: 'var(--text-secondary)', fontSize: 12 }} width={36} />
+          <Tooltip
+            contentStyle={{ background: 'var(--surface-1)', border: '1px solid var(--border)', borderRadius: 6, fontSize: 13 }}
+            labelStyle={{ color: 'var(--text-primary)' }}
+          />
+          <Legend content={() => <ChartLegend items={[{ label: 'Goals', color: 'var(--series-1)' }, { label: 'Assists', color: 'var(--series-5)' }]} />} />
+          <Line type="monotone" dataKey="goals" stroke="var(--series-1)" strokeWidth={2} dot={{ r: 3, fill: 'var(--series-1)' }} connectNulls />
+          <Line type="monotone" dataKey="assists" stroke="var(--series-5)" strokeWidth={2} dot={{ r: 3, fill: 'var(--series-5)' }} connectNulls />
+        </LineChart>
+      </ResponsiveContainer>
     </div>
   )
 }
