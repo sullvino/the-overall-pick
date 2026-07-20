@@ -88,6 +88,11 @@ export function PlayerSeasonChart({
 // over a career, not a vs.-context comparison like the other three charts,
 // so no league average / round average / compare-player lines here.
 function ScoringSplitChart({ data }) {
+  const tooltipRows = [
+    { key: 'goals', label: 'Goals', color: 'var(--series-1)' },
+    { key: 'assists', label: 'Assists', color: 'var(--series-5)' },
+  ]
+
   return (
     <div className="chart-card">
       <h3>Goals vs. assists, by season</h3>
@@ -96,11 +101,8 @@ function ScoringSplitChart({ data }) {
           <CartesianGrid stroke="var(--gridline)" vertical={false} />
           <XAxis dataKey="season" stroke="var(--baseline)" tick={{ fill: 'var(--text-secondary)', fontSize: 11 }} />
           <YAxis stroke="var(--baseline)" tick={{ fill: 'var(--text-secondary)', fontSize: 12 }} width={36} />
-          <Tooltip
-            contentStyle={{ background: 'var(--surface-1)', border: '1px solid var(--border)', borderRadius: 6, fontSize: 13 }}
-            labelStyle={{ color: 'var(--text-primary)' }}
-          />
-          <Legend content={() => <ChartLegend items={[{ label: 'Goals', color: 'var(--series-1)' }, { label: 'Assists', color: 'var(--series-5)' }]} />} />
+          <Tooltip content={(props) => <SeasonTooltip {...props} rows={tooltipRows} />} cursor={{ stroke: 'var(--gridline)' }} />
+          <Legend content={() => <ChartLegend items={tooltipRows} />} />
           <Line type="monotone" dataKey="goals" stroke="var(--series-1)" strokeWidth={2} dot={{ r: 3, fill: 'var(--series-1)' }} connectNulls />
           <Line type="monotone" dataKey="assists" stroke="var(--series-5)" strokeWidth={2} dot={{ r: 3, fill: 'var(--series-5)' }} connectNulls />
         </LineChart>
@@ -109,16 +111,24 @@ function ScoringSplitChart({ data }) {
   )
 }
 
+// Gold marks the actual subject of the chart ("This player") so it reads as
+// the point of the chart, not just another series -- the two reference lines
+// (league avg, round avg) are pushed into muted grays so they recede as
+// context instead of competing with the real data for attention.
 function MiniLineChart({ title, data, dataKey, compareKey, leagueKey, roundAvg, roundLabel, comparePlayerName, unit }) {
   const legendItems = []
-  if (roundAvg !== undefined && roundAvg !== null) {
-    legendItems.push({ label: roundLabel, color: 'var(--series-3)' })
-  }
-  legendItems.push({ label: `League avg (${unit})`, color: 'var(--series-2)' })
+  legendItems.push({ label: 'This player', color: 'var(--gold-dark)' })
   if (comparePlayerName) {
-    legendItems.push({ label: comparePlayerName, color: 'var(--series-4)' })
+    legendItems.push({ label: comparePlayerName, color: 'var(--series-1)' })
   }
-  legendItems.push({ label: 'This player', color: 'var(--series-1)' })
+  legendItems.push({ label: `League avg (${unit})`, color: 'var(--text-secondary)' })
+  if (roundAvg !== undefined && roundAvg !== null) {
+    legendItems.push({ label: roundLabel, color: 'var(--text-muted)' })
+  }
+
+  const tooltipRows = [{ key: dataKey, label: 'This player', color: 'var(--gold-dark)', unit }]
+  if (comparePlayerName) tooltipRows.push({ key: compareKey, label: comparePlayerName, color: 'var(--series-1)', unit })
+  tooltipRows.push({ key: leagueKey, label: 'League avg', color: 'var(--text-secondary)', unit })
 
   return (
     <div className="chart-card">
@@ -128,21 +138,43 @@ function MiniLineChart({ title, data, dataKey, compareKey, leagueKey, roundAvg, 
           <CartesianGrid stroke="var(--gridline)" vertical={false} />
           <XAxis dataKey="season" stroke="var(--baseline)" tick={{ fill: 'var(--text-secondary)', fontSize: 11 }} />
           <YAxis stroke="var(--baseline)" tick={{ fill: 'var(--text-secondary)', fontSize: 12 }} width={36} />
-          <Tooltip
-            contentStyle={{ background: 'var(--surface-1)', border: '1px solid var(--border)', borderRadius: 6, fontSize: 13 }}
-            labelStyle={{ color: 'var(--text-primary)' }}
-          />
+          <Tooltip content={(props) => <SeasonTooltip {...props} rows={tooltipRows} />} cursor={{ stroke: 'var(--gridline)' }} />
           <Legend content={() => <ChartLegend items={legendItems} />} />
           {roundAvg !== undefined && roundAvg !== null && (
-            <ReferenceLine y={roundAvg} stroke="var(--series-3)" strokeDasharray="2 3" />
+            <ReferenceLine y={roundAvg} stroke="var(--text-muted)" strokeDasharray="2 3" />
           )}
-          <Line type="monotone" dataKey={leagueKey} stroke="var(--series-2)" strokeWidth={1.5} strokeDasharray="4 3" dot={false} connectNulls />
+          <Line type="monotone" dataKey={leagueKey} stroke="var(--text-secondary)" strokeWidth={1.5} strokeDasharray="4 3" dot={false} connectNulls />
           {comparePlayerName && (
-            <Line type="monotone" dataKey={compareKey} stroke="var(--series-4)" strokeWidth={2} dot={{ r: 3, fill: 'var(--series-4)' }} connectNulls />
+            <Line type="monotone" dataKey={compareKey} stroke="var(--series-1)" strokeWidth={2} dot={{ r: 3, fill: 'var(--series-1)' }} connectNulls />
           )}
-          <Line type="monotone" dataKey={dataKey} stroke="var(--series-1)" strokeWidth={2} dot={{ r: 3, fill: 'var(--series-1)' }} connectNulls />
+          <Line
+            type="monotone"
+            dataKey={dataKey}
+            stroke="var(--gold-dark)"
+            strokeWidth={2.5}
+            dot={{ r: 4, fill: 'var(--gold-dark)', stroke: 'var(--surface-1)', strokeWidth: 1.5 }}
+            connectNulls
+          />
         </LineChart>
       </ResponsiveContainer>
+    </div>
+  )
+}
+
+function SeasonTooltip({ active, payload, label, rows }) {
+  if (!active || !payload?.length) return null
+  const byKey = Object.fromEntries(payload.map((p) => [p.dataKey, p.value]))
+  const visible = rows.filter((r) => byKey[r.key] !== undefined && byKey[r.key] !== null)
+  if (visible.length === 0) return null
+  return (
+    <div style={{ background: 'var(--surface-1)', border: '1px solid var(--border)', borderRadius: 6, fontSize: 13, padding: '8px 10px' }}>
+      <div style={{ color: 'var(--text-primary)', fontWeight: 700, marginBottom: 4 }}>{label}</div>
+      {visible.map((r) => (
+        <div key={r.key} style={{ color: r.color }}>
+          {r.label}: {byKey[r.key]}
+          {r.unit ? ` ${r.unit}` : ''}
+        </div>
+      ))}
     </div>
   )
 }
